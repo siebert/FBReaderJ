@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2010 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2010 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,23 +17,9 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.zlibrary.core.optionEntries;
+package org.geometerplus.zlibrary.core.util;
 
-import org.geometerplus.zlibrary.core.dialogs.ZLStringOptionEntry;
-import org.geometerplus.zlibrary.core.options.ZLStringOption;
-
-public class ZLSimpleStringOptionEntry extends ZLStringOptionEntry {
-	private final ZLStringOption myOption;
-	
-	public ZLSimpleStringOptionEntry(ZLStringOption option) {
-		myOption = option;
-	}
-	
-	public String initialValue() {
-		return myOption.getValue();
-	}
-
-	public void onAccept(String value) {
-		myOption.setValue(value);
-	}
+public class ZLTTFInfo {
+	public String FamilyName;
+	public String SubFamilyName;
 }

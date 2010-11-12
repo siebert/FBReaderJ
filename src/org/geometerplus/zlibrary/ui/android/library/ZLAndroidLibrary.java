@@ -20,7 +20,7 @@
 package org.geometerplus.zlibrary.ui.android.library;
 
 import java.io.*;
-import java.util.Date;
+import java.util.*;
 
 import android.app.Application;
 import android.content.res.Resources;
@@ -28,14 +28,18 @@ import android.content.res.AssetFileDescriptor;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.format.DateFormat;
+import android.util.DisplayMetrics;
 
 import org.geometerplus.zlibrary.core.library.ZLibrary;
+import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.core.filesystem.ZLResourceFile;
 import org.geometerplus.zlibrary.core.network.ZLNetworkException;
+import org.geometerplus.zlibrary.core.image.ZLImage;
 
 import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.zlibrary.ui.android.view.ZLAndroidWidget;
 import org.geometerplus.zlibrary.ui.android.dialogs.ZLAndroidDialogManager;
+import org.geometerplus.zlibrary.ui.android.image.ZLAndroidResourceBasedImageData;
 
 import org.geometerplus.android.fbreader.network.BookDownloader;
 import org.geometerplus.android.fbreader.network.BookDownloaderService;
@@ -84,7 +88,6 @@ public final class ZLAndroidLibrary extends ZLibrary {
 			intent.putExtra(BookDownloaderService.SHOW_NOTIFICATIONS_KEY, BookDownloaderService.Notifications.ALL);
 			externalUrl = false;
 		}
-		// FIXME: initialize network library and use rewriteUrl!!!
 		final NetworkLibrary nLibrary = NetworkLibrary.Instance();
 		try {
 			nLibrary.initialize();
@@ -100,8 +103,13 @@ public final class ZLAndroidLibrary extends ZLibrary {
 		return new AndroidAssetsFile(path);
 	}
 
-	public ZLResourceFile createDrawableFile(int drawableId) {
-		return new AndroidDrawableFile(drawableId);
+	@Override
+	public ZLResourceFile createResourceFile(ZLResourceFile parent, String name) {
+		return new AndroidAssetsFile((AndroidAssetsFile)parent, name);
+	}
+
+	public ZLImage createImage(int drawableId) {
+		return new ZLAndroidResourceBasedImageData(myApplication.getResources(), drawableId);
 	}
 
 	@Override
@@ -130,61 +138,83 @@ public final class ZLAndroidLibrary extends ZLibrary {
 		return (myActivity != null) ? myActivity.getScreenBrightness() : 0;
 	}
 
-	private final class AndroidDrawableFile extends ZLResourceFile {
-		private int myId;
-
-		AndroidDrawableFile(int drawableId) {
-			super("drawable/" + drawableId);
-			myId = drawableId;
+	@Override
+	public int getDisplayDPI() {
+		if (myActivity == null) {
+			return 0;
 		}
-
-		@Override
-		public boolean exists() {
-			return true;
-		}
-
-		@Override
-		public long size() {
-			try {
-				AssetFileDescriptor descriptor =
-					myApplication.getResources().openRawResourceFd(myId);
-				long length = descriptor.getLength();
-				descriptor.close();
-				return length;
-			} catch (IOException e) {
-				return 0;
-			} catch (Resources.NotFoundException e) {
-				return 0;
-			} 
-		}
-
-		@Override
-		public InputStream getInputStream() throws IOException {
-			try {
-				return myApplication.getResources().openRawResource(myId);
-			} catch (Resources.NotFoundException e) {
-				throw new IOException(e.getMessage());
-			}
-		}
+		DisplayMetrics metrics = new DisplayMetrics();
+		myActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		return (int)(160 * metrics.density);
 	}
 
 	private final class AndroidAssetsFile extends ZLResourceFile {
+		private final AndroidAssetsFile myParent;
+
+		AndroidAssetsFile(AndroidAssetsFile parent, String name) {
+			super(parent.getPath().length() == 0 ? name : parent.getPath() + '/' + name);
+			myParent = parent;
+		}
+
 		AndroidAssetsFile(String path) {
 			super(path);
+			if (path.length() == 0) {
+				myParent = null;
+			} else {
+				final int index = path.lastIndexOf('/');
+				myParent = new AndroidAssetsFile(index >= 0 ? path.substring(0, path.lastIndexOf('/')) : "");
+			}
+		}
+
+		@Override
+		protected List<ZLFile> directoryEntries() {
+			try {
+				String[] names = myApplication.getAssets().list(getPath());
+				if (names != null && names.length != 0) {
+					ArrayList<ZLFile> files = new ArrayList<ZLFile>(names.length);
+					for (String n : names) {
+						files.add(new AndroidAssetsFile(this, n));
+					}
+					return files;
+				}
+			} catch (IOException e) {
+			}
+			return Collections.emptyList();
+		}
+
+		@Override
+		public boolean isDirectory() {
+			try {
+				AssetFileDescriptor descriptor = myApplication.getAssets().openFd(getPath());
+				if (descriptor == null) {
+					return true;
+				}
+				descriptor.close();
+				return false;
+			} catch (IOException e) {
+				return true;
+			}
 		}
 
 		@Override
 		public boolean exists() {
 			try {
 				AssetFileDescriptor descriptor = myApplication.getAssets().openFd(getPath());
-				if (descriptor == null) {
-					return false;
+				if (descriptor != null) {
+					descriptor.close();
+					// file exists
+					return true;
 				}
-				descriptor.close();
-				return true;
 			} catch (IOException e) {
-				return false;
-			} 
+			}
+			try {
+				String[] names = myApplication.getAssets().list(getPath());
+				if (names != null && names.length != 0) {
+					return true;
+				}
+			} catch (IOException e) {
+			}
+			return false;
 		}
 
 		@Override
@@ -204,8 +234,12 @@ public final class ZLAndroidLibrary extends ZLibrary {
 
 		@Override
 		public InputStream getInputStream() throws IOException {
-			System.err.println("open: " + getPath());
 			return myApplication.getAssets().open(getPath());
+		}
+
+		@Override
+		public ZLFile getParent() {
+			return myParent;
 		}
 	}
 }

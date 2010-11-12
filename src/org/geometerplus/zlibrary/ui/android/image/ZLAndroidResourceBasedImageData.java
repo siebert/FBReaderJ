@@ -17,34 +17,24 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.zlibrary.core.optionEntries;
+package org.geometerplus.zlibrary.ui.android.image;
 
-import java.util.*;
+import org.geometerplus.zlibrary.core.image.ZLImage;
 
-import org.geometerplus.zlibrary.core.dialogs.ZLOptionEntry;
-import org.geometerplus.zlibrary.core.options.ZLBooleanOption;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.content.res.Resources;
 
-public class ZLToggleBooleanOptionEntry extends ZLSimpleBooleanOptionEntry {
-	private final ArrayList<ZLOptionEntry> myDependentEntries = new ArrayList<ZLOptionEntry>();
+public final class ZLAndroidResourceBasedImageData extends ZLAndroidImageData implements ZLImage {
+	private final Resources myResources;
+	private final int myId;
 
-	public ZLToggleBooleanOptionEntry(ZLBooleanOption option) {
-		super(option);
+	public ZLAndroidResourceBasedImageData(Resources resources, int id) {
+		myResources = resources;
+		myId = id;
 	}
 
-	public void addDependentEntry(ZLOptionEntry dependent) {
-		myDependentEntries.add(dependent);
-	}
-
-	@Override
-	public void onStateChanged(boolean state) {
-		final int size = myDependentEntries.size();
-		for (int i = 0; i < size; i++) {
-			myDependentEntries.get(i).setVisible(state);
-		}
-	}
-
-	@Override
-	public void onReset() {
-		onStateChanged(initialState());
+	protected Bitmap decodeWithOptions(BitmapFactory.Options options) {
+		return BitmapFactory.decodeResource(myResources, myId, options);
 	}
 }

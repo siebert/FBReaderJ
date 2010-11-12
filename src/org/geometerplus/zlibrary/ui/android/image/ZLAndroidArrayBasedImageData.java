@@ -17,23 +17,19 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.zlibrary.core.optionEntries;
+package org.geometerplus.zlibrary.ui.android.image;
 
-import org.geometerplus.zlibrary.core.dialogs.ZLBooleanOptionEntry;
-import org.geometerplus.zlibrary.core.options.ZLBooleanOption;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
-public class ZLSimpleBooleanOptionEntry extends ZLBooleanOptionEntry {
-	private final ZLBooleanOption myOption;
-	
-	public ZLSimpleBooleanOptionEntry(ZLBooleanOption option) {
-		myOption = option;
-	}
-	
-	public boolean initialState() {
-		return myOption.getValue();
+final class ZLAndroidArrayBasedImageData extends ZLAndroidImageData {
+	private final byte[] myArray;
+
+	ZLAndroidArrayBasedImageData(byte[] array) {
+		myArray = array;
 	}
 
-	public void onAccept(boolean state) {
-		myOption.setValue(state);
+	protected Bitmap decodeWithOptions(BitmapFactory.Options options) {
+		return BitmapFactory.decodeByteArray(myArray, 0, myArray.length, options);
 	}
 }
