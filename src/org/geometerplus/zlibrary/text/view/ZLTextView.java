@@ -354,7 +354,11 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		return scrollbarType() == SCROLLBAR_SHOW || scrollbarType() == SCROLLBAR_SHOW_AS_PROGRESS;
 	}
 
-	private final synchronized int getFullCharNumber() {
+	protected final synchronized int sizeOfTextBeforeParagraph(int paragraphIndex) {
+		return myModel.getTextLength(paragraphIndex - 1);
+	}
+
+	protected final synchronized int sizeOfFullText() {
 		if ((myModel == null) || (myModel.getParagraphsNumber() == 0)) {
 			return 1;
 		}
@@ -379,7 +383,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
 	}
 
 	public final synchronized int getScrollbarFullSize() {
-		return getFullCharNumber();
+		return sizeOfFullText();
 	}
 
 	public final synchronized int getScrollbarThumbPosition(int viewPage) {
@@ -517,7 +521,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
 	}
 
 	public final synchronized int computePageNumber() {
-		return computeTextPageNumber(getFullCharNumber());
+		return computeTextPageNumber(sizeOfFullText());
 	}
 
 	public final synchronized int computeCurrentPage() {
