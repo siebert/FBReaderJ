@@ -23,6 +23,7 @@ import java.util.*;
 import java.io.*;
 import java.nio.charset.CharsetDecoder;
 
+import org.geometerplus.zlibrary.core.constants.MimeTypes;
 import org.geometerplus.zlibrary.core.image.ZLFileImage;
 import org.geometerplus.zlibrary.core.html.ZLByteBuffer;
 import org.geometerplus.zlibrary.core.html.ZLHtmlAttributeMap;
@@ -183,11 +184,7 @@ public class MobipocketHtmlBookReader extends HtmlReader {
 			if (length <= 0) {
 				break;
 			}
-			try {
-				addImage("" + index, new ZLFileImage("image/auto", Model.Book.File, offset, length));
-			} catch (CharStorageWriteException e) {
-				// TODO: process an exception
-			}
+			addImage("" + index, new ZLFileImage(MimeTypes.MIME_IMAGE_AUTO, Model.Book.File, offset, length));
 		}
 	}
 
