@@ -27,14 +27,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.geometerplus.zlibrary.core.resources.ZLResource;
-
-import org.geometerplus.fbreader.tree.FBTree;
-import org.geometerplus.fbreader.library.Library;
-
 import org.geometerplus.zlibrary.ui.android.R;
+
+import org.geometerplus.fbreader.library.Library;
+import org.geometerplus.fbreader.tree.FBTree;
 
 import org.geometerplus.android.fbreader.SQLiteBooksDatabase;
 import org.geometerplus.android.fbreader.tree.ZLAndroidTree;
@@ -51,8 +49,8 @@ public class LibraryTopLevelActivity extends LibraryBaseActivity {
 		if (SQLiteBooksDatabase.Instance() == null) {
 			new SQLiteBooksDatabase(this, "LIBRARY_NG");
 		}
-		if (Library == null) {
-			Library = new Library();
+		if (LibraryInstance == null) {
+			LibraryInstance = new Library();
 			startService(new Intent(getApplicationContext(), InitializationService.class));
 		}
 
@@ -82,6 +80,10 @@ public class LibraryTopLevelActivity extends LibraryBaseActivity {
 			R.drawable.ic_list_library_folder,
 			new Runnable() {
 				public void run() {
+					startActivity(
+						new Intent(LibraryTopLevelActivity.this, FileManager.class)
+							.putExtra(SELECTED_BOOK_PATH_KEY, mySelectedBookPath)
+					);
 				}
 			}
 		));
@@ -92,7 +94,7 @@ public class LibraryTopLevelActivity extends LibraryBaseActivity {
 
 	@Override
 	public void onDestroy() {
-		Library = null;
+		LibraryInstance = null;
 		super.onDestroy();
 	}
 
