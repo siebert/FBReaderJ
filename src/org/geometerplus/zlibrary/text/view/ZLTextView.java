@@ -196,7 +196,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		myScrollingIsActive = active;
 	}
 
-	public final synchronized void startAutoScrolling(int viewPage) {
+	public final synchronized void startAutoScrolling(PageObsolete viewPage) {
 		if (isScrollingActive()) {
 			return;
 		}
@@ -205,13 +205,13 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		ZLApplication.Instance().startViewAutoScrolling(viewPage);
 	}
 
-	public synchronized void onScrollingFinished(int viewPage) {
+	public synchronized void onScrollingFinished(PageObsolete viewPage) {
 		setScrollingActive(false);
 		switch (viewPage) {
-			case PAGE_CENTRAL:
+			case CENTRAL:
 				break;
-			case PAGE_LEFT:
-			case PAGE_TOP:
+			case LEFT:
+			case TOP:
 			{
 				ZLTextPage swap = myNextPage;
 				myNextPage = myCurrentPage;
@@ -231,8 +231,8 @@ public abstract class ZLTextView extends ZLTextViewBase {
 				}
 				break;
 			}
-			case PAGE_RIGHT:
-			case PAGE_BOTTOM:
+			case RIGHT:
+			case BOTTOM:
 			{
 				ZLTextPage swap = myPreviousPage;
 				myPreviousPage = myCurrentPage;
@@ -250,7 +250,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
 	}
 
 	@Override
-	public synchronized void paint(ZLPaintContext context, int viewPage) {
+	public synchronized void paint(ZLPaintContext context, PageObsolete viewPage) {
 		myContext = context;
 		context.clear(getBackgroundColor());
 
@@ -261,11 +261,11 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		ZLTextPage page;
 		switch (viewPage) {
 			default:
-			case PAGE_CENTRAL:
+			case CENTRAL:
 				page = myCurrentPage;
 				break;
-			case PAGE_TOP:
-			case PAGE_LEFT:
+			case TOP:
+			case LEFT:
 				page = myPreviousPage;
 				if (myPreviousPage.PaintState == PaintStateEnum.NOTHING_TO_PAINT) {
 					preparePaintInfo(myCurrentPage);
@@ -273,8 +273,8 @@ public abstract class ZLTextView extends ZLTextViewBase {
 					myPreviousPage.PaintState = PaintStateEnum.END_IS_KNOWN;
 				}
 				break;
-			case PAGE_BOTTOM:
-			case PAGE_RIGHT:
+			case BOTTOM:
+			case RIGHT:
 				page = myNextPage;
 				if (myNextPage.PaintState == PaintStateEnum.NOTHING_TO_PAINT) {
 					preparePaintInfo(myCurrentPage);
@@ -319,16 +319,16 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		}
 	}
 
-	private ZLTextPage getPage(int viewPage) {
+	private ZLTextPage getPage(PageObsolete viewPage) {
 		switch (viewPage) {
 			default:
-			case PAGE_CENTRAL:
+			case CENTRAL:
 				return myCurrentPage;
-			case PAGE_TOP:
-			case PAGE_LEFT:
+			case TOP:
+			case LEFT:
 				return myPreviousPage;
-			case PAGE_BOTTOM:
-			case PAGE_RIGHT:
+			case BOTTOM:
+			case RIGHT:
 				return myNextPage;
 		}
 	}
@@ -354,7 +354,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		return myModel.getTextLength(myModel.getParagraphsNumber() - 1);
 	}
 
-	private final synchronized int getCurrentCharNumber(int viewPage, boolean startNotEndOfPage) {
+	private final synchronized int getCurrentCharNumber(PageObsolete viewPage, boolean startNotEndOfPage) {
 		if ((myModel == null) || (myModel.getParagraphsNumber() == 0)) {
 			return 0;
 		}
@@ -375,11 +375,11 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		return sizeOfFullText();
 	}
 
-	public final synchronized int getScrollbarThumbPosition(int viewPage) {
+	public final synchronized int getScrollbarThumbPosition(PageObsolete viewPage) {
 		return scrollbarType() == SCROLLBAR_SHOW_AS_PROGRESS ? 0 : getCurrentCharNumber(viewPage, true);
 	}
 
-	public final synchronized int getScrollbarThumbLength(int viewPage) {
+	public final synchronized int getScrollbarThumbLength(PageObsolete viewPage) {
 		int start = scrollbarType() == SCROLLBAR_SHOW_AS_PROGRESS ? 0 : getCurrentCharNumber(viewPage, true);
 		int end = getCurrentCharNumber(viewPage, false);
 		return Math.max(1, end - start);
@@ -489,7 +489,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
 	}
 
 	public final synchronized int computeCurrentPage() {
-		return computeTextPageNumber(getCurrentCharNumber(PAGE_CENTRAL, false));
+		return computeTextPageNumber(getCurrentCharNumber(PageObsolete.CENTRAL, false));
 	}
 
 	public final synchronized void gotoPage(int page) {

@@ -19,18 +19,20 @@
 
 package org.geometerplus.zlibrary.ui.android.view;
 
+import org.geometerplus.zlibrary.core.view.ZLView;
+
 import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
 
 public class ZLAndroidViewWidget {
 	//@Override
-	public void scrollTo(int viewPage, int shift) {
+	public void scrollTo(ZLView.PageObsolete viewPage, int shift) {
 		final ZLAndroidWidget widget = 
 			((ZLAndroidLibrary)ZLAndroidLibrary.Instance()).getWidget();
 		widget.scrollToPage(viewPage, shift);
 	}
 
 	//@Override
-	public void startAutoScrolling(int viewPage) {
+	public void startAutoScrolling(ZLView.PageObsolete viewPage) {
 		final ZLAndroidWidget widget = 
 			((ZLAndroidLibrary)ZLAndroidLibrary.Instance()).getWidget();
 		widget.startAutoScrolling(viewPage);

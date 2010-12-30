@@ -26,6 +26,7 @@ import android.view.MenuItem;
 
 import org.geometerplus.zlibrary.core.application.ZLApplication;
 import org.geometerplus.zlibrary.core.application.ZLApplicationWindow;
+import org.geometerplus.zlibrary.core.view.ZLView;
 
 import org.geometerplus.zlibrary.ui.android.view.ZLAndroidViewWidget;
 import org.geometerplus.zlibrary.ui.android.view.ZLAndroidWidget;
@@ -109,11 +110,11 @@ public final class ZLAndroidApplicationWindow extends ZLApplicationWindow {
 		widget.postInvalidate();
 	}
 
-	protected void scrollViewTo(int viewPage, int shift) {
+	protected void scrollViewTo(ZLView.PageObsolete viewPage, int shift) {
 		getViewWidget().scrollTo(viewPage, shift);
 	}
 
-	protected void startViewAutoScrolling(int viewPage) {
+	protected void startViewAutoScrolling(ZLView.PageObsolete viewPage) {
 		getViewWidget().startAutoScrolling(viewPage);
 	}
 

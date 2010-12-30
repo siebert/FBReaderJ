@@ -42,7 +42,7 @@ public final class FBView extends ZLTextView {
 		super.setModel(model);
 	}
 
-	public void onScrollingFinished(int viewPage) {
+	public void onScrollingFinished(PageObsolete viewPage) {
 		super.onScrollingFinished(viewPage);
 	}
 
@@ -54,14 +54,14 @@ public final class FBView extends ZLTextView {
 				if (cursor != null &&
 					!cursor.isNull() &&
 					(!cursor.isEndOfParagraph() || !cursor.getParagraphCursor().isLast())) {
-					startAutoScrolling(preferences.HorizontalOption.getValue() ? PAGE_RIGHT : PAGE_BOTTOM);
+					startAutoScrolling(preferences.HorizontalOption.getValue() ? PageObsolete.RIGHT : PageObsolete.BOTTOM);
 				}
 			} else {
 				ZLTextWordCursor cursor = getStartCursor();
 				if (cursor != null &&
 					!cursor.isNull() &&
 					(!cursor.isStartOfParagraph() || !cursor.getParagraphCursor().isFirst())) {
-					startAutoScrolling(preferences.HorizontalOption.getValue() ? PAGE_LEFT : PAGE_TOP);
+					startAutoScrolling(preferences.HorizontalOption.getValue() ? PageObsolete.LEFT : PageObsolete.TOP);
 				}
 			}
 		} else {
@@ -162,7 +162,7 @@ public final class FBView extends ZLTextView {
 						return false;
 					}
 					if (!cursor.isStartOfParagraph() || !cursor.getParagraphCursor().isFirst()) {
-						myReader.scrollViewTo(horizontal ? PAGE_LEFT : PAGE_TOP, diff);
+						myReader.scrollViewTo(horizontal ? PageObsolete.LEFT : PageObsolete.TOP, diff);
 					}
 				} else if (diff < 0) {
 					ZLTextWordCursor cursor = getEndCursor();
@@ -170,10 +170,10 @@ public final class FBView extends ZLTextView {
 						return false;
 					}
 					if (!cursor.isEndOfParagraph() || !cursor.getParagraphCursor().isLast()) {
-						myReader.scrollViewTo(horizontal ? PAGE_RIGHT : PAGE_BOTTOM, -diff);
+						myReader.scrollViewTo(horizontal ? PageObsolete.RIGHT : PageObsolete.BOTTOM, -diff);
 					}
 				} else {
-					myReader.scrollViewTo(PAGE_CENTRAL, 0);
+					myReader.scrollViewTo(PageObsolete.CENTRAL, 0);
 				}
 				return true;
 			}
@@ -212,16 +212,16 @@ public final class FBView extends ZLTextView {
 					final int minDiff = horizontal ?
 						((w > h) ? w / 4 : w / 3) :
 						((h > w) ? h / 4 : h / 3);
-					int viewPage = PAGE_CENTRAL;
+					PageObsolete viewPage = PageObsolete.CENTRAL;
 					if (Math.abs(diff) > minDiff) {
 						viewPage = horizontal ?
-							((diff < 0) ? PAGE_RIGHT : PAGE_LEFT) :
-							((diff < 0) ? PAGE_BOTTOM : PAGE_TOP);
+							((diff < 0) ? PageObsolete.RIGHT : PageObsolete.LEFT) :
+							((diff < 0) ? PageObsolete.BOTTOM : PageObsolete.TOP);
 					}
 					if (ScrollingPreferences.Instance().AnimateOption.getValue()) {
 						startAutoScrolling(viewPage);
 					} else {
-						myReader.scrollViewTo(PAGE_CENTRAL, 0);
+						myReader.scrollViewTo(PageObsolete.CENTRAL, 0);
 						onScrollingFinished(viewPage);
 						myReader.repaintView();
 						setScrollingActive(false);

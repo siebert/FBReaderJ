@@ -65,8 +65,8 @@ public class ZLAndroidWidget extends View {
 			myScrollingInProgress = false;
 			myScrollingShift = 0;
 			myScreenIsTouched = false;
-			view.onScrollingFinished(ZLView.PAGE_CENTRAL);
-			setPageToScroll(ZLView.PAGE_CENTRAL);
+			view.onScrollingFinished(ZLView.PageObsolete.CENTRAL);
+			setPageToScroll(ZLView.PageObsolete.CENTRAL);
 		}
 	}
 
@@ -126,8 +126,8 @@ public class ZLAndroidWidget extends View {
 			myScrollingSpeed *= 1.5;
 		}
 		final boolean horizontal =
-			(myViewPageToScroll == ZLView.PAGE_RIGHT) ||
-			(myViewPageToScroll == ZLView.PAGE_LEFT);
+			(myViewPageToScroll == ZLView.PageObsolete.RIGHT) ||
+			(myViewPageToScroll == ZLView.PageObsolete.LEFT);
 		canvas.drawBitmap(
 			myMainBitmap,
 			horizontal ? myScrollingShift : 0,
@@ -153,9 +153,9 @@ public class ZLAndroidWidget extends View {
 				view.onScrollingFinished(myViewPageToScroll);
 				ZLApplication.Instance().onRepaintFinished();
 			} else {
-				view.onScrollingFinished(ZLView.PAGE_CENTRAL);
+				view.onScrollingFinished(ZLView.PageObsolete.CENTRAL);
 			}
-			setPageToScroll(ZLView.PAGE_CENTRAL);
+			setPageToScroll(ZLView.PageObsolete.CENTRAL);
 			myScrollingInProgress = false;
 			myScrollingShift = 0;
 		} else {
@@ -177,18 +177,18 @@ public class ZLAndroidWidget extends View {
 		drawFooter(canvas);
 	}
 
-	private int myViewPageToScroll = ZLView.PAGE_CENTRAL;
-	private void setPageToScroll(int viewPage) {
+	private ZLView.PageObsolete myViewPageToScroll = ZLView.PageObsolete.CENTRAL;
+	private void setPageToScroll(ZLView.PageObsolete viewPage) {
 		if (myViewPageToScroll != viewPage) {
 			myViewPageToScroll = viewPage;
 			mySecondaryBitmapIsUpToDate = false;
 		}
 	}
 
-	void scrollToPage(int viewPage, int shift) {
+	void scrollToPage(ZLView.PageObsolete viewPage, int shift) {
 		switch (viewPage) {
-			case ZLView.PAGE_BOTTOM:
-			case ZLView.PAGE_RIGHT:
+			case BOTTOM:
+			case RIGHT:
 				shift = -shift;
 				break;
 		}
@@ -206,46 +206,46 @@ public class ZLAndroidWidget extends View {
 		postInvalidate();
 	}
 
-	void startAutoScrolling(int viewPage) {
+	void startAutoScrolling(ZLView.PageObsolete viewPage) {
 		if (myMainBitmap == null) {
 			return;
 		}
 		myScrollingInProgress = true;
 		switch (viewPage) {
-			case ZLView.PAGE_CENTRAL:
+			case CENTRAL:
 				switch (myViewPageToScroll) {
-					case ZLView.PAGE_CENTRAL:
+					case CENTRAL:
 						myScrollingSpeed = 0;
 						break;
-					case ZLView.PAGE_LEFT:
-					case ZLView.PAGE_TOP:
+					case LEFT:
+					case TOP:
 						myScrollingSpeed = -3;
 						break;
-					case ZLView.PAGE_RIGHT:
-					case ZLView.PAGE_BOTTOM:
+					case RIGHT:
+					case BOTTOM:
 						myScrollingSpeed = 3;
 						break;
 				}
 				myScrollingBound = 0;
 				break;
-			case ZLView.PAGE_LEFT:
+			case LEFT:
 				myScrollingSpeed = 3;
 				myScrollingBound = getWidth();
 				break;
-			case ZLView.PAGE_RIGHT:
+			case RIGHT:
 				myScrollingSpeed = -3;
 				myScrollingBound = -getWidth();
 				break;
-			case ZLView.PAGE_TOP:
+			case TOP:
 				myScrollingSpeed = 3;
 				myScrollingBound = getMainAreaHeight();
 				break;
-			case ZLView.PAGE_BOTTOM:
+			case BOTTOM:
 				myScrollingSpeed = -3;
 				myScrollingBound = -getMainAreaHeight();
 				break;
 		}
-		if (viewPage != ZLView.PAGE_CENTRAL) {
+		if (viewPage != ZLView.PageObsolete.CENTRAL) {
 			setPageToScroll(viewPage);
 		}
 		drawOnBitmap(mySecondaryBitmap);
@@ -272,7 +272,7 @@ public class ZLAndroidWidget extends View {
 			getMainAreaHeight(),
 			view.isScrollbarShown() ? getVerticalScrollbarWidth() : 0
 		);
-		view.paint(context, (bitmap == myMainBitmap) ? ZLView.PAGE_CENTRAL : myViewPageToScroll);
+		view.paint(context, (bitmap == myMainBitmap) ? ZLView.PageObsolete.CENTRAL : myViewPageToScroll);
 	}
 
 	private void drawFooter(Canvas canvas) {
@@ -432,16 +432,16 @@ public class ZLAndroidWidget extends View {
 			return 0;
 		}
 		if (myScrollingInProgress || (myScrollingShift != 0)) {
-			final int from = view.getScrollbarThumbLength(ZLView.PAGE_CENTRAL);
+			final int from = view.getScrollbarThumbLength(ZLView.PageObsolete.CENTRAL);
 			final int to = view.getScrollbarThumbLength(myViewPageToScroll);
 			final boolean horizontal =
-				(myViewPageToScroll == ZLView.PAGE_RIGHT) ||
-				(myViewPageToScroll == ZLView.PAGE_LEFT);
+				(myViewPageToScroll == ZLView.PageObsolete.RIGHT) ||
+				(myViewPageToScroll == ZLView.PageObsolete.LEFT);
 			final int size = horizontal ? getWidth() : getMainAreaHeight();
 			final int shift = Math.abs(myScrollingShift);
 			return (from * (size - shift) + to * shift) / size;
 		} else {
-			return view.getScrollbarThumbLength(ZLView.PAGE_CENTRAL);
+			return view.getScrollbarThumbLength(ZLView.PageObsolete.CENTRAL);
 		}
 	}
 
@@ -451,16 +451,16 @@ public class ZLAndroidWidget extends View {
 			return 0;
 		}
 		if (myScrollingInProgress || (myScrollingShift != 0)) {
-			final int from = view.getScrollbarThumbPosition(ZLView.PAGE_CENTRAL);
+			final int from = view.getScrollbarThumbPosition(ZLView.PageObsolete.CENTRAL);
 			final int to = view.getScrollbarThumbPosition(myViewPageToScroll);
 			final boolean horizontal =
-				(myViewPageToScroll == ZLView.PAGE_RIGHT) ||
-				(myViewPageToScroll == ZLView.PAGE_LEFT);
+				(myViewPageToScroll == ZLView.PageObsolete.RIGHT) ||
+				(myViewPageToScroll == ZLView.PageObsolete.LEFT);
 			final int size = horizontal ? getWidth() : getMainAreaHeight();
 			final int shift = Math.abs(myScrollingShift);
 			return (from * (size - shift) + to * shift) / size;
 		} else {
-			return view.getScrollbarThumbPosition(ZLView.PAGE_CENTRAL);
+			return view.getScrollbarThumbPosition(ZLView.PageObsolete.CENTRAL);
 		}
 	}
 

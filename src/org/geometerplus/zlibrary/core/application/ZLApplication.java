@@ -86,13 +86,13 @@ public abstract class ZLApplication {
 		}
 	}
 
-	public final void scrollViewTo(int viewPage, int shift) {
+	public final void scrollViewTo(ZLView.PageObsolete viewPage, int shift) {
 		if (myWindow != null) {
 			myWindow.scrollViewTo(viewPage, shift);
 		}
 	}
 
-	public final void startViewAutoScrolling(int viewPage) {
+	public final void startViewAutoScrolling(ZLView.PageObsolete viewPage) {
 		if (myWindow != null) {
 			myWindow.startViewAutoScrolling(viewPage);
 		}
