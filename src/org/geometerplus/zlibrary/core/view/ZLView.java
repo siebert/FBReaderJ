@@ -41,6 +41,19 @@ abstract public class ZLView {
 		BOTTOM
 	}
 
+	public enum Page {
+		CURRENT,
+		PREVIOUS,
+		NEXT
+	}
+
+	public enum Direction {
+		LEFT_TO_RIGHT,
+		RIGHT_TO_LEFT,
+		UP,
+		DOWN
+	}
+
 	abstract public void paint(ZLPaintContext context, PageObsolete viewPage);
 	abstract public void onScrollingFinished(PageObsolete viewPage);
 
