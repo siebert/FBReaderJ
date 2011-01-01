@@ -334,7 +334,8 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 
 		final Screen scrollingScreen = createPreferenceScreen("scrolling");
 		final ScrollingPreferences scrollingPreferences = ScrollingPreferences.Instance();
-		scrollingScreen.addOption(scrollingPreferences.FlickOption, "flick");
+		scrollingScreen.addOption(scrollingPreferences.FingerScrollingOption, "fingerScrolling");
+		scrollingScreen.addOption(scrollingPreferences.DoubleTapNavigationOption, "doubleTapNavigation");
 		scrollingScreen.addOption(scrollingPreferences.VolumeKeysOption, "volumeKeys");
 		scrollingScreen.addOption(scrollingPreferences.InvertVolumeKeysOption, "invertVolumeKeys");
 		scrollingScreen.addOption(scrollingPreferences.AnimateOption, "animated");

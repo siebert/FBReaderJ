@@ -102,7 +102,10 @@ public final class FBView extends ZLTextView {
 		}
 
 		final ScrollingPreferences preferences = ScrollingPreferences.Instance();
-		if (!preferences.FlickOption.getValue()) {
+		final ScrollingPreferences.FingerScrolling fingerScrolling =
+			preferences.FingerScrollingOption.getValue();
+		if (fingerScrolling == ScrollingPreferences.FingerScrolling.byTap ||
+			fingerScrolling == ScrollingPreferences.FingerScrolling.byTapAndFlick) {
 			if (preferences.HorizontalOption.getValue()) {
 				if (x <= myContext.getWidth() / 3) {
 					doScrollPage(false);
@@ -121,6 +124,12 @@ public final class FBView extends ZLTextView {
 		return true;
 	}
 
+	@Override
+	public boolean isDoubleTapSupported() {
+		return ScrollingPreferences.Instance().DoubleTapNavigationOption.getValue();
+	}
+
+	@Override
 	public boolean onFingerDoubleTap() {
 		if (super.onFingerDoubleTap()) {
 			return true;
@@ -154,7 +163,10 @@ public final class FBView extends ZLTextView {
 		}
 
 		final ScrollingPreferences preferences = ScrollingPreferences.Instance();
-		if (preferences.FlickOption.getValue()) {
+		final ScrollingPreferences.FingerScrolling fingerScrolling =
+			preferences.FingerScrollingOption.getValue();
+		if (fingerScrolling == ScrollingPreferences.FingerScrolling.byFlick ||
+			fingerScrolling == ScrollingPreferences.FingerScrolling.byTapAndFlick) {
 			myStartX = x;
 			myStartY = y;
 			setScrollingActive(true);
