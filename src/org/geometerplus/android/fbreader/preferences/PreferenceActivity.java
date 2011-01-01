@@ -343,9 +343,14 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 		final Screen dictionaryScreen = createPreferenceScreen("dictionary");
 		dictionaryScreen.addPreference(new ZLBooleanPreference(
 			this,
-			fbReader.OpenDictionaryOnTapOption,
+			fbReader.NavigateAllWordsOption,
 			dictionaryScreen.Resource,
-			"runDictionaryOnTap"
+			"navigateOverAllWords"
+		));
+		final String[] actions = { "doNothing", "selectWord", "openDictionary" };
+		dictionaryScreen.addPreference(new ZLChoicePreference(
+			this, dictionaryScreen.Resource, "tappingAction",
+			fbReader.DictionaryModeTappingActionOption, actions
 		));
 	}
 }
