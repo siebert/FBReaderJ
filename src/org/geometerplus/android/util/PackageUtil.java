@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2010-2011 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -115,7 +115,9 @@ public abstract class PackageUtil {
 							buttonResource.getResource(positiveButtonKey).getValue(),
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog, int which) {
-									PackageUtil.installFromMarket(activity, plugin);
+									if (!PackageUtil.installFromMarket(activity, plugin)) {
+										UIUtil.showErrorMessage(activity, "cannotRunAndroidMarket", "plugin");
+									}
 								}
 							}
 						)

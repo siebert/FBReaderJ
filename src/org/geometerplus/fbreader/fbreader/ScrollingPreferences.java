@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2010 Geometer Plus <contact@geometerplus.com>
+ * Copyright (C) 2007-2011 Geometer Plus <contact@geometerplus.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ public class ScrollingPreferences {
 	public final ZLEnumOption<FingerScrolling> FingerScrollingOption =
 		new ZLEnumOption<FingerScrolling>("Scrolling", "Finger", FingerScrolling.byTapAndFlick);
 
-	public final ZLBooleanOption DoubleTapNavigationOption = new ZLBooleanOption("Scrolling", "DoubleTapNavigation", false);
+	//public final ZLBooleanOption DoubleTapNavigationOption = new ZLBooleanOption("Scrolling", "DoubleTapNavigation", false);
 	public final ZLBooleanOption VolumeKeysOption = new ZLBooleanOption("Scrolling", "VolumeKeys", true);
 	public final ZLBooleanOption AnimateOption = new ZLBooleanOption("Scrolling", "ShowAnimated", true);
 	public final ZLBooleanOption HorizontalOption = new ZLBooleanOption("Scrolling", "Horizontal", true);
