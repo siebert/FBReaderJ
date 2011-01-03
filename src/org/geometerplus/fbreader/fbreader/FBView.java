@@ -47,21 +47,21 @@ public final class FBView extends ZLTextView {
 	}
 
 	final void doScrollPage(boolean forward) {
-		final ScrollingPreferences preferences = ScrollingPreferences.Instance();
-		if (preferences.AnimateOption.getValue()) {
+		final boolean horizontal = ScrollingPreferences.Instance().HorizontalOption.getValue();
+		if (getAnimationType() != Animation.none) {
 			if (forward) {
 				ZLTextWordCursor cursor = getEndCursor();
 				if (cursor != null &&
 					!cursor.isNull() &&
 					(!cursor.isEndOfParagraph() || !cursor.getParagraphCursor().isLast())) {
-					startAutoScrolling(preferences.HorizontalOption.getValue() ? PageObsolete.RIGHT : PageObsolete.BOTTOM);
+					startAutoScrolling(horizontal ? PageObsolete.RIGHT : PageObsolete.BOTTOM);
 				}
 			} else {
 				ZLTextWordCursor cursor = getStartCursor();
 				if (cursor != null &&
 					!cursor.isNull() &&
 					(!cursor.isStartOfParagraph() || !cursor.getParagraphCursor().isFirst())) {
-					startAutoScrolling(preferences.HorizontalOption.getValue() ? PageObsolete.LEFT : PageObsolete.TOP);
+					startAutoScrolling(horizontal ? PageObsolete.LEFT : PageObsolete.TOP);
 				}
 			}
 		} else {
@@ -126,8 +126,7 @@ public final class FBView extends ZLTextView {
 
 	@Override
 	public boolean isDoubleTapSupported() {
-		return true;
-		//return ScrollingPreferences.Instance().DoubleTapNavigationOption.getValue();
+		return myReader.EnableDoubleTapOption.getValue();
 	}
 
 	@Override
@@ -167,15 +166,16 @@ public final class FBView extends ZLTextView {
 			return true;
 		}
 
-		final ScrollingPreferences preferences = ScrollingPreferences.Instance();
-		final ScrollingPreferences.FingerScrolling fingerScrolling =
-			preferences.FingerScrollingOption.getValue();
-		if (fingerScrolling == ScrollingPreferences.FingerScrolling.byFlick ||
-			fingerScrolling == ScrollingPreferences.FingerScrolling.byTapAndFlick) {
-			myStartX = x;
-			myStartY = y;
-			setScrollingActive(true);
-			myIsManualScrollingActive = true;
+		if (getAnimationType() != Animation.none) {
+			final ScrollingPreferences.FingerScrolling fingerScrolling =
+				ScrollingPreferences.Instance().FingerScrollingOption.getValue();
+			if (fingerScrolling == ScrollingPreferences.FingerScrolling.byFlick ||
+				fingerScrolling == ScrollingPreferences.FingerScrolling.byTapAndFlick) {
+				myStartX = x;
+				myStartY = y;
+				setScrollingActive(true);
+				myIsManualScrollingActive = true;
+			}
 		}
 
 		return true;
@@ -262,7 +262,7 @@ public final class FBView extends ZLTextView {
 							((diff < 0) ? PageObsolete.RIGHT : PageObsolete.LEFT) :
 							((diff < 0) ? PageObsolete.BOTTOM : PageObsolete.TOP);
 					}
-					if (ScrollingPreferences.Instance().AnimateOption.getValue()) {
+					if (getAnimationType() != Animation.none) {
 						startAutoScrolling(viewPage);
 					} else {
 						myReader.scrollViewTo(PageObsolete.CENTRAL, 0);
@@ -559,5 +559,10 @@ public final class FBView extends ZLTextView {
 	@Override
 	public int scrollbarType() {
 		return myReader.ScrollbarTypeOption.getValue();
+	}
+
+	@Override
+	public Animation getAnimationType() {
+		return ScrollingPreferences.Instance().AnimationOption.getValue();
 	}
 }

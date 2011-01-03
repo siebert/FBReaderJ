@@ -54,6 +54,11 @@ abstract public class ZLView {
 		DOWN
 	}
 
+	public enum Animation {
+		none, slide, shift
+	}
+	public abstract Animation getAnimationType();
+
 	abstract public void paint(ZLPaintContext context, PageObsolete viewPage);
 	abstract public void onScrollingFinished(PageObsolete viewPage);
 
