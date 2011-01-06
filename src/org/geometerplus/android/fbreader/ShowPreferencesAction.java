@@ -26,17 +26,14 @@ import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
 import org.geometerplus.android.fbreader.preferences.PreferenceActivity;
 
-class ShowPreferencesAction extends FBAction {
-	private final FBReader myBaseActivity;
-
+class ShowPreferencesAction extends FBActivityAction {
 	ShowPreferencesAction(FBReader baseActivity, FBReaderApp fbreader) {
-		super(fbreader);
-		myBaseActivity = baseActivity;
+		super(baseActivity, fbreader);
 	}
 
 	public void run() {
-		myBaseActivity.startActivityForResult(
-			new Intent(myBaseActivity.getApplicationContext(), PreferenceActivity.class),
+		BaseActivity.startActivityForResult(
+			new Intent(BaseActivity.getApplicationContext(), PreferenceActivity.class),
 			FBReader.REPAINT_CODE
 		);
 	}

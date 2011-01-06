@@ -43,7 +43,8 @@ public interface ActionCode {
 	String SHOW_MENU = "menu";
 	String SHOW_NAVIGATION = "navigate";
 	String CANCEL = "cancel";
-	String ROTATE = "rotate";
+	String HOLD_ORIENTATION = "holdOrienation";
+	String RELEASE_ORIENTATION = "releaseOrientation";
 	String INCREASE_FONT = "increaseFont";
 	String DECREASE_FONT = "decreaseFont";
 

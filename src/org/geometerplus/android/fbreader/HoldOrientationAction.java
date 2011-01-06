@@ -17,18 +17,20 @@
  * 02110-1301, USA.
  */
 
-package org.geometerplus.fbreader.fbreader;
+package org.geometerplus.android.fbreader;
 
-class RotateAction extends FBAction {
-	RotateAction(FBReaderApp fbreader) {
-		super(fbreader);
-	}
+import org.geometerplus.fbreader.fbreader.FBAction;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
 
-	public void run() {
-		Reader.rotateScreen();
+class HoldOrientationAction extends FBActivityAction {
+	HoldOrientationAction(FBReader baseActivity, FBReaderApp fbreader) {
+		super(baseActivity, fbreader);
 	}
 
 	public boolean isVisible() {
-		return Reader.canRotateScreen();
+		return true;
+	}
+
+	public void run() {
 	}
 }

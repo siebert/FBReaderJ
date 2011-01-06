@@ -9,7 +9,8 @@
 	<item id="search"/>
 	<item id="preferences"/>
 	<item id="bookInfo"/>
-	<item id="rotate"/>
+	<item id="holdOrientation"/>
+	<item id="releaseOrientation"/>
 	<item id="increaseFont"/>
 	<item id="decreaseFont"/>
 	<item id="navigate"/>
