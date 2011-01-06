@@ -28,9 +28,10 @@ class HoldOrientationAction extends FBActivityAction {
 	}
 
 	public boolean isVisible() {
-		return true;
+		return !BaseActivity.isOrientationOnHold();
 	}
 
 	public void run() {
+		BaseActivity.holdOrientation();
 	}
 }

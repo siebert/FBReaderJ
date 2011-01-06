@@ -99,30 +99,6 @@ public abstract class ZLAndroidActivity extends Activity {
 		ZLApplication.Instance().repaintView();
 	}
 
-	@Override
-	public void onStart() {
-		super.onStart();
-
-		/*
-		if (ZLAndroidApplication.Instance().AutoOrientationOption.getValue()) {
-			setAutoRotationMode();
-		} else {
-			switch (myOrientation) {
-				case ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
-				case ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
-					if (getRequestedOrientation() != myOrientation) {
-						setRequestedOrientation(myOrientation);
-						myChangeCounter = 0;
-					}
-					break;
-				default:
-					setAutoRotationMode();
-					break;
-			}
-		}
-		*/
-	}
-
 	private PowerManager.WakeLock myWakeLock;
 	private boolean myWakeLockToCreate;
 	private boolean myStartTimer;
@@ -181,12 +157,12 @@ public abstract class ZLAndroidActivity extends Activity {
 			setScreenBrightnessAuto();
 		}
 
-		final int orientation = application.OrientationOption.getValue();
+		int orientation = application.OrientationOption.getValue();
 		if (orientation == -1) {
-			setAutoRotationMode();
-		} else {
-			setRequestedOrientation(orientation);
+			orientation = application.AutoOrientationOption.getValue() ?
+				ActivityInfo.SCREEN_ORIENTATION_SENSOR : ActivityInfo.SCREEN_ORIENTATION_NOSENSOR;
 		}
+		setRequestedOrientation(orientation);
 
 		registerReceiver(myBatteryInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 	}
@@ -230,11 +206,29 @@ public abstract class ZLAndroidActivity extends Activity {
 		return ((view != null) && view.onKeyUp(keyCode, event)) || super.onKeyUp(keyCode, event);
 	}
 
-	private void setAutoRotationMode() {
+	public boolean isOrientationOnHold() {
+		return ZLAndroidApplication.Instance().OrientationOption.getValue() != -1;
+	}
+
+	private int getCurrentScreenOrientation() {
+		System.err.println("orientation = " + getResources().getConfiguration().orientation);
+		return -1;
+	}
+
+	public void holdOrientation() {
+		final ZLAndroidApplication application = ZLAndroidApplication.Instance();
+		final Display display = ((WindowManager)getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+		final int orientation = display.getOrientation();
+		setRequestedOrientation(orientation);
+		application.OrientationOption.setValue(orientation);
+	}
+
+	public void releaseOrientation() {
 		final ZLAndroidApplication application = ZLAndroidApplication.Instance();
 		final int orientation = application.AutoOrientationOption.getValue() ?
 			ActivityInfo.SCREEN_ORIENTATION_SENSOR : ActivityInfo.SCREEN_ORIENTATION_NOSENSOR;
 		setRequestedOrientation(orientation);
+		application.OrientationOption.setValue(-1);
 	}
 
 	BroadcastReceiver myBatteryInfoReceiver = new BroadcastReceiver() {
