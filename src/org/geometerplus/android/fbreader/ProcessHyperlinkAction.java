@@ -103,6 +103,10 @@ class ProcessHyperlinkAction extends FBActivityAction {
 		} catch (ZLNetworkException e) {
 		}
 		intent.setData(Uri.parse(NetworkLibrary.Instance().rewriteUrl(urlString, externalUrl)));
-		BaseActivity.startActivity(intent);
+		try {
+			BaseActivity.startActivity(intent);
+		} catch (ActivityNotFoundException e) {
+			// TODO: show an error message
+		}
 	}
 }
