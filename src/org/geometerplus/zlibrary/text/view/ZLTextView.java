@@ -22,6 +22,7 @@ package org.geometerplus.zlibrary.text.view;
 import java.util.*;
 
 import org.geometerplus.zlibrary.core.application.ZLApplication;
+import org.geometerplus.zlibrary.core.util.ZLVisitedLinkManager;
 import org.geometerplus.zlibrary.core.view.ZLPaintContext;
 import org.geometerplus.zlibrary.text.model.*;
 import org.geometerplus.zlibrary.text.hyphenation.*;
@@ -654,6 +655,12 @@ public abstract class ZLTextView extends ZLTextViewBase {
 		do {
 			resetTextStyle();
 			final ZLTextParagraphCursor paragraphCursor = result.getParagraphCursor();
+			if (paragraphCursor != null && paragraphCursor.isStartOfSection()) {
+				ZLTextParagraph.EntryIterator iter = paragraphCursor.getParagraph().iterator();
+				iter.next();
+				ZLVisitedLinkManager.Instance().markLinkVisited(iter.getPageLink());
+				// TODO: Cached pages should be redrawn as they might contain links which are now marked visited.
+			}
 			final int wordIndex = result.getElementIndex();
 			applyControls(paragraphCursor, 0, wordIndex);
 			ZLTextLineInfo info = new ZLTextLineInfo(paragraphCursor, wordIndex, result.getCharIndex(), getTextStyle());

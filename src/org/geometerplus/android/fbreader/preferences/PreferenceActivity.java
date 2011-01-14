@@ -217,6 +217,9 @@ public class PreferenceActivity extends ZLPreferenceActivity {
 		colorsScreen.addPreference(new ZLColorPreference(
 			this, colorsScreen.Resource, "hyperlink", profile.HyperlinkTextOption
 		));
+		colorsScreen.addPreference(new ZLColorPreference(
+				this, colorsScreen.Resource, "hyperlinkVisited", profile.HyperlinkVisitedTextOption
+			));
 		footerPreferences.add(colorsScreen.addPreference(new ZLColorPreference(
 			this, colorsScreen.Resource, "footer", profile.FooterFillOption
 		)));
