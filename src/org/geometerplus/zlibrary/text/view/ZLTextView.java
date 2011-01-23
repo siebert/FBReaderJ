@@ -251,6 +251,14 @@ public abstract class ZLTextView extends ZLTextViewBase {
 	}
 
 	@Override
+	public synchronized void checkInvalidCache() {
+		if (myCurrentPage.myInvalidCache) {
+			clearCaches();
+			myCurrentPage.myInvalidCache = false;
+		}
+	}
+
+	@Override
 	public synchronized void paint(ZLPaintContext context, int viewPage) {
 		myContext = context;
 		context.clear(getBackgroundColor());
@@ -659,7 +667,7 @@ public abstract class ZLTextView extends ZLTextViewBase {
 				ZLTextParagraph.EntryIterator iter = paragraphCursor.getParagraph().iterator();
 				iter.next();
 				ZLVisitedLinkManager.Instance().markLinkVisited(iter.getPageLink());
-				// TODO: Cached pages should be redrawn as they might contain links which are now marked visited.
+				page.myInvalidCache = true;
 			}
 			final int wordIndex = result.getElementIndex();
 			applyControls(paragraphCursor, 0, wordIndex);

@@ -47,6 +47,7 @@ public final class FBView extends ZLTextView {
 	}
 
 	final void doScrollPage(boolean forward) {
+		checkInvalidCache();
 		final boolean horizontal = ScrollingPreferences.Instance().HorizontalOption.getValue();
 		if (getAnimationType() != Animation.none) {
 			if (forward) {
